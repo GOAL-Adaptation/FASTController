@@ -20,7 +20,7 @@ public class FASTControllerModel {
     internal let nMeasures: Int
 
     /// Create a `FASTControllerModel` - performs assertions on sizing and sorting
-    init(measures: [[Double]]) {
+    public init(measures: [[Double]]) {
         let nEntries = measures.count
         assert(nEntries > 0, "measures array must not be empty (nEntries = 0)")
         let nMeasures = measures[0].count
