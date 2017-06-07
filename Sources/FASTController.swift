@@ -40,7 +40,8 @@ public class FASTController {
     private let ls: FASTControllerLogState = FASTControllerLogState()
 
     /// Create a `FASTController` - performs assertions on parameter values
-    init(model: FASTControllerModel,
+    public init(
+         model: FASTControllerModel,
          constraint: Double,
          constraintMeasureIdx: Int,
          window: UInt32,
