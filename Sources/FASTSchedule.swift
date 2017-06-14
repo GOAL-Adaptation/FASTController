@@ -20,7 +20,7 @@ public struct FASTSchedule {
     public let nLowerIterations: Int
 
     /// Create a `FASTSchedule` - performs assertions on parameter value ranges (must all be `>= 0`)
-    init(idLower: Int = 0, idUpper: Int = 0, nLowerIterations: Int = 0) {
+    public init(idLower: Int = 0, idUpper: Int = 0, nLowerIterations: Int = 0) {
         assert(idLower >= 0, "idLower must be >= 0")
         assert(idUpper >= 0, "idUpper must be >= 0")
         assert(nLowerIterations >= 0, "nLowerIterations must be >= 0")
