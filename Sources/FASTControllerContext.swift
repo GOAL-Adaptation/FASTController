@@ -19,6 +19,8 @@ internal class FASTControllerContext {
     let optType: FASTControllerOptimizationType
     /// A callback that computes the value we are trying to optimize.
     let ocb: GetCostOrValueFunction
+    /// the constraint model - sorted and normalized array for model[i][constraintMeasureIdx]
+    let xupModel: [Double]
 
     /// Create a `FASTControllerContext` - performs assertions on parameter value ranges
     init(model: FASTControllerModel,
@@ -36,5 +38,15 @@ internal class FASTControllerContext {
         self.optType = optType
         self.model = model
         self.ocb = ocb
+        // create the xupModel, normalized by the constraint measure
+        var xupModel: [Double] = [Double](repeating: 0.0, count: model.nEntries)
+        xupModel[0] = 1.0
+        for i in 1..<xupModel.count {
+            // verify that the model is properly sorted by the constraint measure
+            assert(model.measures[i][constraintMeasureIdx] >= model.measures[i - 1][constraintMeasureIdx],
+                   "Model not sorted by constraintMeasureIdx at entry=\(i)")
+            xupModel[i] = model.measures[i][constraintMeasureIdx] / model.measures[0][constraintMeasureIdx]
+        }
+        self.xupModel = xupModel
     }
 }

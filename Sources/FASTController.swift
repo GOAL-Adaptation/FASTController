@@ -11,7 +11,7 @@ import Foundation
 /**
  Assumes a linear interpolation of a pair of configurations `i` and `j` from the model.
  The interpolation is based on the time spent in each configuration such that the `constraint` in
- `FASTController.init()` is satisifed for (normalized) measure at index `constraintMeasureIdx`.
+ `FASTController.init()` is satisifed for measure at index `constraintMeasureIdx`.
 */
 public typealias GetCostOrValueFunction = ([Double]) -> Double
 
@@ -70,8 +70,8 @@ public class FASTController {
     */
     private func computeScheduleAndCost(xupTarget: Double, i: Int, j: Int) -> (Double, Int) {
         assert(xupTarget >= 1.0)
-        let xupLower = ctx.model.measures[j][ctx.constraintMeasureIdx]
-        let xupUpper = ctx.model.measures[i][ctx.constraintMeasureIdx]
+        let xupLower = ctx.xupModel[j]
+        let xupUpper = ctx.xupModel[i]
         assert(xupLower <= xupUpper)
         // Calculate the time division between the upper and lower state
         // x = percentage of the window period spent in the lower configuration
@@ -112,12 +112,12 @@ public class FASTController {
                 costBest = -Double.infinity
         }
         for i in 0..<ctx.model.nEntries {
-            if ctx.model.measures[i][ctx.constraintMeasureIdx] < xupTarget {
+            if ctx.xupModel[i] < xupTarget {
                 // upper xup must be >= xupTarget
                 continue
             }
             for j in 0..<ctx.model.nEntries {
-                if ctx.model.measures[j][ctx.constraintMeasureIdx] > xupTarget {
+                if ctx.xupModel[j] > xupTarget {
                     // lower xup must be <= xupTarget
                     continue
                 }
@@ -157,8 +157,7 @@ public class FASTController {
         // estimate workload
         let workload = kf.estimateBaseWorkload(xupLast: xs.getLastXup(), workloadLast: constraintAchieved)
         // compute xup
-        let xup = xs.calculateXup(ctx.constraint, constraintAchieved, workload,
-                                  ctx.model.measures[ctx.model.nEntries - 1][ctx.constraintMeasureIdx])
+        let xup = xs.calculateXup(ctx.constraint, constraintAchieved, workload, ctx.xupModel[ctx.xupModel.count - 1])
         // schedule for next window period
         let sched = computeOptimalSchedule(xupTarget: xup)
         // log iteration results
