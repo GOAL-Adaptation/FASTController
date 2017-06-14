@@ -153,7 +153,6 @@ public class FASTController {
         assert(measures.count == ctx.model.nMeasures,
                "Length of measures must be the same as ctx.model.nMeasures (\(measures.count) != \(ctx.model.nMeasures))")
         let constraintAchieved: Double = measures[ctx.constraintMeasureIdx]
-        assert(constraintAchieved > 0, "Measure at constraintMeasureIdx must be > 0")
         // estimate workload
         let workload = kf.estimateBaseWorkload(xupLast: xs.getLastXup(), workloadLast: constraintAchieved)
         // compute xup
