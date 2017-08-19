@@ -49,7 +49,7 @@ public class FASTController {
          ocb: @escaping GetCostOrValueFunction,
          initialModelEntryIdx: Int) {
         assert(initialModelEntryIdx >= 0, "initialModelEntryIdx must be >= 0")
-        assert(initialModelEntryIdx < model.nMeasures, "initialModelEntryIdx must be < model.nMeasures")
+        assert(constraintMeasureIdx < model.nMeasures, "constraintMeasureIdx must be < model.nMeasures")
         self.ctx = FASTControllerContext(model: model,
                                          constraint: constraint,
                                          constraintMeasureIdx: constraintMeasureIdx,
