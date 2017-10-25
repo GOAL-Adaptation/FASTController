@@ -50,15 +50,15 @@ class FASTControllerTests: XCTestCase {
                 // testing that the controller worked ...
                 // TODO: These expected results aren't actually verified...
                 if (i == WINDOW_PERIOD) {
-                    assert(sched.idLower == 0)
-                    assert(sched.idUpper == 2)
-                    assert(sched.nLowerIterations == 1)
+                    XCTAssert(sched.idLower == 0)
+                    XCTAssert(sched.idUpper == 2)
+                    XCTAssert(sched.nLowerIterations == 1)
                 } else if (i == 2 * WINDOW_PERIOD) {
                     iterMeasures[MEASURE_XUP_IDX] = CONSTRAINT / 2
                     iterMeasures[MEASURE_COSTUP_IDX] = 10
-                    assert(sched.idLower == 0)
-                    assert(sched.idUpper == 2)
-                    assert(sched.nLowerIterations == 0)
+                    XCTAssert(sched.idLower == 0)
+                    XCTAssert(sched.idUpper == 2)
+                    XCTAssert(sched.nLowerIterations == 0)
                 }
             }
         }
