@@ -14,9 +14,17 @@ internal class FASTControllerXupState {
     // errors
     private var e: Double = 0.0
     private var eo: Double = 0.0
-    // constants
     // dominant pole
-    private let p1: Double = 0.0
+    var p1: Double {
+        get {
+            return self.p1
+        }
+        set{
+            assert((newValue >= 0) && (newValue < 1), "Pole values should be in [0,1) range")
+            self.p1 = newValue;
+        }
+    }
+    // constants
     // second pole
     private let p2: Double = 0.0
     // zero
@@ -28,6 +36,7 @@ internal class FASTControllerXupState {
         self.u = xupStart
         self.uo = xupStart
         self.uoo = xupStart
+        self.p1 = 0.0
     }
 
     /// Calculate the xup to achieve in the next window period (control iteration).

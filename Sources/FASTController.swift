@@ -164,12 +164,14 @@ public class FASTController {
         return sched
     }
     
-    
-    ///Set functions for the constraint
+    /// Set functions for the constraint
     public func setConstraint(_ constraint: Double) {
         self.ctx.constraint = constraint
     }
-    
-    
-    
+
+    /// Set p1 value in XupState
+    public func setPole(_ pole: Double) {
+        self.xs.p1 = pole
+    }
+
 }
