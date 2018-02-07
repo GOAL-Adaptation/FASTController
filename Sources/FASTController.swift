@@ -174,4 +174,9 @@ public class FASTController {
         self.xs.p1 = pole
     }
 
+    /// Set model in the FASTControllerContext
+    public func setModel(_ model: FASTControllerModel){
+        self.ctx.model = model
+    }
+
 }
