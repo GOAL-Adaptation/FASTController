@@ -163,4 +163,13 @@ public class FASTController {
         ls.logIteration(tag, constraintAchieved, workload, self.kf, self.xs, sched)
         return sched
     }
+    
+    
+    ///Set functions for the constraint
+    public func setConstraint(_ constraint: Double) {
+        self.ctx.constraint = constraint
+    }
+    
+    
+    
 }
