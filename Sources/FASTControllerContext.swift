@@ -16,21 +16,23 @@ internal class FASTControllerContext {
     /// A callback that computes the value we are trying to optimize.
     let ocb: GetCostOrValueFunction
     /// The controller model.
+    private var _model: FASTControllerModel!
     var model: FASTControllerModel {
         get {
-            return self.model
+            return self._model
         }
         set {
-            assert(self.model.nMeasures == newValue.nMeasures, "Number of measures cannot change")
+            assert(self._model.nMeasures == newValue.nMeasures, "Number of measures cannot change")
             self.setModel(newValue)
         }
     }
     /// the constraint model - sorted and normalized array for model[i][constraintMeasureIdx]
     private(set) var xupModel: [Double]!
     /// The window period (number of application jobs between controller decisions).
+    private var _period: UInt32!
     var period: UInt32 {
         get {
-            return self.period
+            return self._period
         }
         set {
             self.setPeriod(newValue)
@@ -65,13 +67,13 @@ internal class FASTControllerContext {
                    "Model not sorted by constraintMeasureIdx at entry=\(i)")
             xupModel[i] = model.measures[i][constraintMeasureIdx] / model.measures[0][constraintMeasureIdx]
         }
-        self.model = model
+        self._model = model
         self.xupModel = xupModel
     }
 
     private func setPeriod(_ period: UInt32) {
         assert(period > 0, "period must be > 0")
-        self.period = period
+        self._period = period
     }
 
 }

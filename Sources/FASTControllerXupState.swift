@@ -15,11 +15,12 @@ internal class FASTControllerXupState {
     private var e: Double = 0.0
     private var eo: Double = 0.0
     // dominant pole
-    var p1: Double {
+    private var p1: Double
+    var pole: Double {
         get {
             return self.p1
         }
-        set{
+        set {
             assert((newValue >= 0) && (newValue < 1), "Pole values should be in [0,1) range")
             self.p1 = newValue;
         }

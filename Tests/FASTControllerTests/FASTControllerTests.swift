@@ -25,13 +25,18 @@ class FASTControllerTests: XCTestCase {
     }
 
     func testFASTController() {
-        let fc = FASTController(model: FASTControllerModel(measures: TEST_MEASURES),
+        let model = FASTControllerModel(measures: TEST_MEASURES)
+        let fc = FASTController(model: model,
                                 constraint: CONSTRAINT,
                                 constraintMeasureIdx: MEASURE_XUP_IDX,
                                 window: WINDOW_PERIOD,
                                 optType: .minimize,
                                 ocb: callback,
                                 initialModelEntryIdx: 0)
+        // test setters (previous impls were causing infinite recursion)
+        fc.setConstraint(CONSTRAINT)
+        fc.setPole(0)
+        fc.setModel(model)
         var iterMeasures: [Double] = [ 0.0, 0.0 ]
         for i in 0...WINDOW_PERIOD {
             // do app work here...

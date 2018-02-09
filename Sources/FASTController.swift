@@ -171,7 +171,7 @@ public class FASTController {
 
     /// Set p1 value in XupState
     public func setPole(_ pole: Double) {
-        self.xs.p1 = pole
+        self.xs.pole = pole
     }
 
     /// Set model in the FASTControllerContext
