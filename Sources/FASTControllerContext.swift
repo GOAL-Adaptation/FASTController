@@ -13,9 +13,9 @@ internal class FASTControllerContext {
     /// The index of the measure we are trying to meet a constraint for (must be < `FASTControllerModel.nMeasures`).
     let constraintMeasureIdx: Int
     /// The type of optimization to perform (minimize or maximize).
-    let optType: FASTControllerOptimizationType
+    var optType: FASTControllerOptimizationType
     /// A callback that computes the value we are trying to optimize.
-    let ocb: GetCostOrValueFunction
+    var ocb: GetCostOrValueFunction
     /// The controller model.
     private var _model: FASTControllerModel!
     var model: FASTControllerModel {

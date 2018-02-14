@@ -179,4 +179,14 @@ public class FASTController {
         self.ctx.model = model
     }
 
+    /// Set optType in the FASTControllerContext
+    public func setOptType(_ optType: FASTControllerOptimizationType){
+        self.ctx.optType = optType
+    }
+
+    /// Set ocb in the FASTControllerContext
+    public func setModel(_ ocb: @escaping GetCostOrValueFunction){
+        self.ctx.ocb = ocb
+    }
+
 }
