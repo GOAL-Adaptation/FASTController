@@ -185,7 +185,7 @@ public class FASTController {
     }
 
     /// Set ocb in the FASTControllerContext
-    public func setModel(_ ocb: @escaping GetCostOrValueFunction){
+    public func setOcb(_ ocb: @escaping GetCostOrValueFunction){
         self.ctx.ocb = ocb
     }
 
