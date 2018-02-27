@@ -16,18 +16,32 @@ import Foundation
 public typealias GetCostOrValueFunction = ([Double]) -> Double
 
 /// Maintains logging config and state.
-private struct FASTControllerLogState {
-    // TODO: Some kind of logger or file stream
-
-    // TODO: String formatting appears to be a pain; not consistent between Linux and Apple systems (yet)
-
-    init() {
-        // TODO: log header
+private class FASTControllerLogState {
+    var csv: FileHandle? = nil {
+        didSet {
+            // log header
+            if let fh = csv {
+                let s = "ID,Tag,Constraint,Workload" +
+                        ",kf.x_hat_minus,kf.x_hat,kf.p_minus,kf.h,kf.k,kf.p" +
+                        ",xs.pole,xs.u,xs.e" +
+                        ",sched.idLower,sched.idUpper,sched.nLowerIterations,sched.oscillating\n"
+                guard let data = s.data(using: .utf8) else { return }
+                fh.write(data)
+            }
+        }
     }
 
     func logIteration(_ id: UInt64, _ tag: UInt64, _ constraintAchieved: Double, _ workload: Double,
                       _ kf: FASTControllerKalmanFilter, _ xs: FASTControllerXupState, _ sched: FASTSchedule) {
-        // TODO: log iteration
+        // log iteration
+        if let fh = self.csv {
+            let s = "\(id),\(tag),\(constraintAchieved),\(workload)" +
+                    ",\(kf.x_hat_minus),\(kf.x_hat),\(kf.p_minus),\(kf.h),\(kf.k),\(kf.p)" +
+                    ",\(xs.p1),\(xs.u),\(xs.e)" +
+                    ",\(sched.idLower),\(sched.idUpper),\(sched.nLowerIterations),\(sched.oscillating)\n"
+            guard let data = s.data(using: .utf8) else { return }
+            fh.write(data)
+        }
     }
 }
 
@@ -75,6 +89,11 @@ public class FASTController {
     public var pole: Double {
         get { return self.xs.p1 }
         set { self.xs.p1 = newValue }
+    }
+
+    public var logFile: FileHandle? {
+        get { return self.ls.csv }
+        set { self.ls.csv = newValue }
     }
 
     /// Create a `FASTController` - performs assertions on parameter values

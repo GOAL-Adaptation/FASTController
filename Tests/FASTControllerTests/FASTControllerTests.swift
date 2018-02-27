@@ -113,5 +113,6 @@ class FASTControllerTests: XCTestCase {
         ("testFASTSchedule", testFASTSchedule),
         ("testFASTController", testFASTController),
         ("testFASTController_oscillation_detection", testFASTController_oscillation_detection)
+        // TODO: Test logging
     ]
 }
