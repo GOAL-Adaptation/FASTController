@@ -34,9 +34,9 @@ class FASTControllerTests: XCTestCase {
                                 ocb: callback,
                                 initialModelEntryIdx: 0)
         // test setters (previous impls were causing infinite recursion)
-        fc.setConstraint(CONSTRAINT)
-        fc.setPole(0)
-        fc.setModel(model)
+        fc.constraint = CONSTRAINT
+        fc.pole = 0
+        fc.model = model
         var iterMeasures: [Double] = [ 0.0, 0.0 ]
         for i in 0...WINDOW_PERIOD {
             // do app work here...
@@ -81,7 +81,7 @@ class FASTControllerTests: XCTestCase {
                                 optType: .minimize,
                                 ocb: callback,
                                 initialModelEntryIdx: 0)
-        fc.setPole(0)
+        fc.pole = 0
         // set oscillation detection to be +/- CONSTRAINT/2 (so total difference is CONSTRAINT)
         // the first iteration follows a period of observation, so we can't consider it for oscillation
         // we pick this error threshold so that the first assertion fails if the controller doesn't wait

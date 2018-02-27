@@ -37,16 +37,45 @@ public class FASTController {
     private let kf: FASTControllerKalmanFilter = FASTControllerKalmanFilter()
     private let xs: FASTControllerXupState
     private let ls: FASTControllerLogState = FASTControllerLogState()
+    private var id: UInt64 = 0
+
+    // Wrapper getters/setters
+
     /// Controller is deemed to be oscillating if abs(error_last - error_current) > oscillationErrorThreshold
     public var oscillationErrorThreshold: Double {
-        get {
-            return self.ctx.oscillationErrorThreshold
-        }
-        set {
-            self.ctx.oscillationErrorThreshold = newValue
-        }
+        get { return self.ctx.oscillationErrorThreshold }
+        set { self.ctx.oscillationErrorThreshold = newValue }
     }
-    private var id: UInt64 = 0
+
+    /// The controller model
+    public var model: FASTControllerModel {
+        get { return self.ctx.model }
+        set { self.ctx.model = newValue }
+    }
+
+    /// The controller constraint value
+    public var constraint: Double {
+        get { return self.ctx.constraint }
+        set { self.ctx.constraint = newValue }
+    }
+
+    /// The controller optimization type
+    public var optType: FASTControllerOptimizationType {
+        get { return self.ctx.optType }
+        set { self.ctx.optType = newValue }
+    }
+
+    /// The controller optimization callback function
+    public var ocb: GetCostOrValueFunction {
+        get { return self.ctx.ocb }
+        set { self.ctx.ocb = newValue }
+    }
+
+    /// The controller pole value
+    public var pole: Double {
+        get { return self.xs.p1 }
+        set { self.xs.p1 = newValue }
+    }
 
     /// Create a `FASTController` - performs assertions on parameter values
     public init(
@@ -182,28 +211,33 @@ public class FASTController {
     }
     
     /// Set functions for the constraint
+    @available(*, deprecated, message: "Use FASTController.constraint instead")
     public func setConstraint(_ constraint: Double) {
-        self.ctx.constraint = constraint
+        self.constraint = constraint
     }
 
     /// Set p1 value in XupState
+    @available(*, deprecated, message: "Use FASTController.pole instead")
     public func setPole(_ pole: Double) {
-        self.xs.pole = pole
+        self.pole = pole
     }
 
     /// Set model in the FASTControllerContext
+    @available(*, deprecated, message: "Use FASTController.model instead")
     public func setModel(_ model: FASTControllerModel){
-        self.ctx.model = model
+        self.model = model
     }
 
     /// Set optType in the FASTControllerContext
+    @available(*, deprecated, message: "Use FASTController.optType instead")
     public func setOptType(_ optType: FASTControllerOptimizationType){
-        self.ctx.optType = optType
+        self.optType = optType
     }
 
     /// Set ocb in the FASTControllerContext
+    @available(*, deprecated, message: "Use FASTController.ocb instead")
     public func setOcb(_ ocb: @escaping GetCostOrValueFunction){
-        self.ctx.ocb = ocb
+        self.ocb = ocb
     }
 
 }
