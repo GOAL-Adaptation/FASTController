@@ -18,6 +18,8 @@ public struct FASTSchedule {
     public let idUpper: Int
     /// The number of iterations to spend in the lower config; upper configuration gets `period - nLowerIterations`.
     public let nLowerIterations: Int
+    /// Set to true if the controller observes that its signal is oscillating (and may need a new model)
+    internal(set) var oscillating: Bool = false
 
     /// Create a `FASTSchedule` - performs assertions on parameter value ranges (must all be `>= 0`)
     public init(idLower: Int = 0, idUpper: Int = 0, nLowerIterations: Int = 0) {

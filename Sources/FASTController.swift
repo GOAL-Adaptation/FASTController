@@ -17,7 +17,6 @@ public typealias GetCostOrValueFunction = ([Double]) -> Double
 
 /// Maintains logging config and state.
 private struct FASTControllerLogState {
-    var id: UInt64 = 0
     // TODO: Some kind of logger or file stream
 
     // TODO: String formatting appears to be a pain; not consistent between Linux and Apple systems (yet)
@@ -26,7 +25,7 @@ private struct FASTControllerLogState {
         // TODO: log header
     }
 
-    func logIteration(_ tag: UInt64, _ constraintAchieved: Double, _ workload: Double,
+    func logIteration(_ id: UInt64, _ tag: UInt64, _ constraintAchieved: Double, _ workload: Double,
                       _ kf: FASTControllerKalmanFilter, _ xs: FASTControllerXupState, _ sched: FASTSchedule) {
         // TODO: log iteration
     }
@@ -38,6 +37,16 @@ public class FASTController {
     private let kf: FASTControllerKalmanFilter = FASTControllerKalmanFilter()
     private let xs: FASTControllerXupState
     private let ls: FASTControllerLogState = FASTControllerLogState()
+    /// Controller is deemed to be oscillating if abs(error_last - error_current) > oscillationErrorThreshold
+    public var oscillationErrorThreshold: Double {
+        get {
+            return self.ctx.oscillationErrorThreshold
+        }
+        set {
+            self.ctx.oscillationErrorThreshold = newValue
+        }
+    }
+    private var id: UInt64 = 0
 
     /// Create a `FASTController` - performs assertions on parameter values
     public init(
@@ -154,13 +163,21 @@ public class FASTController {
                "Length of measures must be the same as ctx.model.nMeasures (\(measures.count) != \(ctx.model.nMeasures))")
         let constraintAchieved: Double = measures[ctx.constraintMeasureIdx]
         // estimate workload
-        let workload = kf.estimateBaseWorkload(xupLast: xs.getLastXup(), workloadLast: constraintAchieved)
+        let workload = kf.estimateBaseWorkload(xupLast: xs.u, workloadLast: constraintAchieved)
         // compute xup
         let xup = xs.calculateXup(ctx.constraint, constraintAchieved, workload, ctx.xupModel[ctx.xupModel.count - 1])
         // schedule for next window period
-        let sched = computeOptimalSchedule(xupTarget: xup)
+        var sched = computeOptimalSchedule(xupTarget: xup)
+        // check for oscillation after controller should've converged; requires >= 2 prior iterations of actuation
+        // (error from first iteration, which was only observation, may have been really bad, so always ignore it)
+        // in short, don't act until the third iteration at the earliest (id >= 2)
+        if (abs(xs.e - xs.eo) >= ctx.oscillationErrorThreshold) &&
+           (self.id > max(1, UInt64(ceil(xs.getConfidenceZone())))) {
+            sched.oscillating = true
+        }
         // log iteration results
-        ls.logIteration(tag, constraintAchieved, workload, self.kf, self.xs, sched)
+        ls.logIteration(self.id, tag, constraintAchieved, workload, self.kf, self.xs, sched)
+        self.id += 1
         return sched
     }
     

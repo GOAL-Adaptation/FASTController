@@ -13,7 +13,7 @@ internal class FASTControllerXupState {
     private var uoo: Double
     // errors
     private(set) var e: Double = 0.0
-    private var eo: Double = 0.0
+    private(set) var eo: Double = 0.0
     // dominant pole
     private var p1: Double
     var pole: Double {
@@ -57,20 +57,32 @@ internal class FASTControllerXupState {
         let C = (((mu - (mu * p1)) * p2) + (mu * p1) - mu) * w
         let D = ((((mu * p1) - mu) * p2) - (mu * p1) + mu) * w * z1
         let F = 1.0 / (z1 - 1.0)
+        // Save old values
+        uoo = uo
+        uo = u
+        eo = e
         // compute error
         e = constraintTarget - constraintAchieved
         // Calculate xup
         u = F * ((A * uo) + (B * uoo) + (C * e) + (D * eo))
         // xup less than 1 has no effect; greater than the maximum is not achievable
         u = min(max(1.0, u), xupMax)
-        // Save old values
-        uoo = uo
-        uo = u
-        eo = e
         return u
     }
 
-    internal func getLastXup() -> Double {
-        return u
+    /// Minimum number of control steps before the controller should settle within epsilon percent of the constraint.
+    /// A function of the pole value and epsilon; usually epsilon = 0.05.
+    /// See: A. Filieri et al. Software Engineering Meets Control Theory. In: SEAMS. 2015.
+    /**
+     Compute the confidence zone.
+     - parameters:
+        - epsilon: the percent of the constraint the controller should be converged within, in range (0,1)
+     - returns: log(epsilon)/log(pole), or 0 if pole = 0 (value always >= 0)
+    */
+    internal func getConfidenceZone(_ epsilon: Double = 0.05) -> Double {
+        assert(epsilon > 0.0 && epsilon < 1.0, "Epsilon must be in range (0,1)");
+        // expect instantaneous settling if pole is 0
+        return self.p1 > 0.0 ? (_log2(epsilon) / _log2(self.p1)) : 0.0;
     }
+
 }

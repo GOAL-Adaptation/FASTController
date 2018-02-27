@@ -39,6 +39,17 @@ internal class FASTControllerContext {
             self.setPeriod(newValue)
         }
     }
+    /// Controller is deemed to be oscillating if abs(error_last - error_current) > oscillationErrorThreshold
+    private var _oet: Double = Double.infinity
+    var oscillationErrorThreshold: Double {
+        get {
+            return self._oet
+        }
+        set {
+            assert(newValue > 0, "oscillationErrorThreshold must be > 0")
+            self._oet = newValue
+        }
+    }
 
     /// Create a `FASTControllerContext` - performs assertions on parameter value ranges
     init(model: FASTControllerModel,
