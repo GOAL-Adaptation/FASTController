@@ -61,7 +61,6 @@ internal class FASTControllerContext {
                "model.nMeasures (\(model.nMeasures)) must be > constraintMeasureIdx (\(self.constraintMeasureIdx))")
         // create the xupModel, normalized by the constraint measure
         var xupModel: [Double] = [Double](repeating: 0.0, count: model.nEntries)
-        // TODO: currently verifying that base value != 0; is there a way to support a 0 value?
         assert(abs(model.measures[0][constraintMeasureIdx]) >= Double.leastNonzeroMagnitude,
                "First constraint measure value in model cannot be 0 (unable to normalize)")
         xupModel[0] = 1.0

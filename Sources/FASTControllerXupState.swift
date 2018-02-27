@@ -8,11 +8,11 @@
 /// Computes a generic control signal (xup) based on current and prior xup and error values.
 internal class FASTControllerXupState {
     // xups
-    private var u: Double
+    private(set) var u: Double
     private var uo: Double
     private var uoo: Double
     // errors
-    private var e: Double = 0.0
+    private(set) var e: Double = 0.0
     private var eo: Double = 0.0
     // dominant pole
     private var p1: Double

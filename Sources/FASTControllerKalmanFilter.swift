@@ -7,12 +7,12 @@
 
 /// The Kalman filter for estimating base workload.
 internal class FASTControllerKalmanFilter {
-    private var x_hat_minus: Double = 0.0
-    private var x_hat: Double = 0.2
-    private var p_minus: Double = 0.0
-    private var h: Double = 0.0
-    private var k: Double = 0.0
-    private var p: Double = 1.0
+    private(set) var x_hat_minus: Double = 0.0
+    private(set) var x_hat: Double = 0.2
+    private(set) var p_minus: Double = 0.0
+    private(set) var h: Double = 0.0
+    private(set) var k: Double = 0.0
+    private(set) var p: Double = 1.0
     // constants
     private let q: Double = 0.00001
     private let r: Double = 0.01
