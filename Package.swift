@@ -1,10 +1,15 @@
-// swift-tools-version:3.1
+// swift-tools-version:4.0
 
 import PackageDescription
 
 let package = Package(
-    name: "FASTController",
-    dependencies: [
-      // .Package(url: "https://github.com/IBM-Swift/LoggerAPI", majorVersion: 1, minor: 7),
-    ]
+  name: "FASTController",
+  products: [
+    .library(name: "FASTController", targets: ["FASTController"]),
+  ],
+  targets: [
+    .target(name: "FASTController"),
+    .testTarget(name: "FASTControllerTests", dependencies: ["FASTController"])
+  ],
+  swiftLanguageVersions: [4]
 )
