@@ -1,4 +1,4 @@
-# FAST Controller - Swift 3.x Implementation
+# FAST Controller - Swift 4 Implementation
 
 Compute schedules to meet constraints and optimally minimize cost or maximize value.
 
