@@ -113,7 +113,12 @@ public class FASTController {
                                          period: window,
                                          optType: optType,
                                          ocb: ocb)
-        self.xs = FASTControllerXupState(model.measures[initialModelEntryIdx][constraintMeasureIdx])
+        let initialXup = self.ctx.xupModel[initialModelEntryIdx]
+        print("[FASTController] Original model's constraint measure column: \(model.measures.map{ $0[constraintMeasureIdx] }).")
+        print("[FASTController] Original model initial model entry id: \(initialModelEntryIdx).")
+        print("[FASTController] xupModel: \(self.ctx.xupModel).")
+        print("[FASTController] Initial xup: \(initialXup).")
+        self.xs = FASTControllerXupState(initialXup)
     }
 
     /// Compute the schedule and cost for a pair of configurations.
