@@ -216,7 +216,8 @@ public class FASTController {
                "Length of measures must be the same as ctx.model.nMeasures (\(measures.count) != \(ctx.model.nMeasures))")
         let constraintAchieved: Double = measures[ctx.constraintMeasureIdx]
         // estimate workload
-        let workload = kf.estimateBaseWorkload(xupLast: xs.u, workloadLast: constraintAchieved)
+        // let workload = kf.estimateBaseWorkload(xupLast: xs.u, workloadLast: constraintAchieved)
+        let workload: Double = 0.1
         // compute xup
         let xup = xs.calculateXup(ctx.constraint, constraintAchieved, workload, ctx.xupModel[ctx.xupModel.count - 1])
         // schedule for next window period
